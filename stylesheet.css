@@ -1,0 +1,78 @@
+body {
+  cursor: default;
+  background-color: #FFF;
+  color: #222;
+}
+
+.config {
+  margin: 32px auto;
+  padding: 0;
+  border: 0;
+}
+
+.config tr, .config th, .config td {
+  margin: 0;
+  padding: 0;
+}
+
+.config th, .config td {
+  border: 1px solid #222;
+  text-align: center;
+}
+
+.config th {
+  font-size: 14pt;
+  font-weight: 900;
+  padding: 8px 16px;
+}
+
+.config td input {
+  margin: 4px 8px;
+  padding: 2px;
+  font-size: 14pt;
+  font-weight: 900;
+  border: 0;
+  border-bottom: 2px solid #222;
+  width: 50px;
+}
+
+.config td input[type=text] {
+  min-width: 150px;
+}
+
+.config td input {
+  text-align: center;
+}
+
+.config td button {
+  cursor: pointer;
+  margin: 4px;
+  background-color: #DEDEDE;
+  color: #222;
+  border: 1px solid #222;
+  font-size: 16pt;
+  height: 85px;
+}
+
+.config td button:hover {
+  background-color: #EFEFEF;
+}
+
+.config td button:active {
+  background-color: #454545;
+  color: #FFF;
+}
+
+.config td input[type=color] {
+  border: 0;
+}
+
+.config td input.interval-time {
+  display: inline-block;
+  width: 100px;
+}
+
+.config td .current-state {
+  display: inline-block;
+  width: 300px;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Word Search Algorithm Visualizer</title>
+    <meta name="author" content="wisn">
+    <meta name="description" content="Visualize how word search algorithm works. Supported algorithms are brute force, dynamic programming, and backtracking.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="./stylesheet.css">
+    <link rel="icon" type="image/png" href="https://wisn.github.io/assets/img/pissed.png">
+    <script lang="javascript" src="./TestcaseGenerator.js"></script>
+    <script lang="javascript" src="./GridMaker.js"></script>
+    <script lang="javascript" src="./GridMarker.js"></script>
+    <script lang="javascript" src="./StateManager.js"></script>
+    <script lang="javascript" src="./BruteForceSolver.js"></script>
+  </head>
+  <body>
+    <div align="center">
+      <h1>Word Search Algorithm Visualizer</h1>
+      <hr>
+      <table border="1" class="config grid-generator">
+        <tr>
+          <th>Row<br>Number</th>
+          <th>Col<br>Number</th>
+          <th>Starting<br>Number</th>
+          <th>Target Words</th>
+          <td rowspan="2">
+            <button type="submit" onclick="regenerateGrid()">Generate</button>
+          </td>
+        </tr>
+        <tr>
+          <td><input class="row-number" type="number" min="3" max="10" placeholder="8" value="8"></td>
+          <td><input class="col-number" type="number" min="3" max="26" placeholder="16" value="16"></td>
+          <td><input class="starting-number" type="number" min="1" max="10" placeholder="4" value="4"></td>
+          <td><input class="target-words" type="text" minlength="3" maxlength="24" placeholder="WORD" value="WORD"></td>
+        </tr>
+      </table>
+      <div id="canvas"></div>
+      <hr>
+      <table border="1" class="config animation">
+        <tr>
+          <th>Marker<br>Color</th>
+          <th>Answer<br>Color</th>
+          <th>Interval Time<br>(ms)</th>
+          <td rowspan="2">
+            <button type="submit" onclick="runSolver('bruteforce')">Brute Force!</button>
+          </td>
+          <td rowspan="2">
+            <button type="submit" onclick="runSolver('dynamicprogramming')">Dynamic Programming!</button>
+          </td>
+          <td rowspan="2">
+            <button type="submit" onclick="runSolver('backtracking')">Backtracking!</button>
+          </td>
+          <th>Elapsed<br>Time</th>
+          <th>Current State</th>
+        </tr>
+        <tr>
+          <td><input class="marker-color" type="color" placeholder="#fbff00" value="#fbff00"></td>
+          <td><input class="answer-color" type="color" placeholder="#33ff00" value="#33ff00"></td>
+          <td><input class="interval-time" type="number" min="1" max="5000" placeholder="100" value="100"></td>
+          <td><label class="elapsed-time">N/A</label></td>
+          <td><label class="current-state">N/A</label></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+
+<script lang="javascript">
+  generateDirection();
+  regenerateGrid();
+  configureAnimation();
+
+  function generateDirection() {
+    if (typeof window.globals === "undefined") {
+      window.globals = {};
+    }
+
+    window.globals.directions = [
+      [0, -1], [-1, -1], [-1, 0], [-1, 1],
+      [0, 1], [1, 1], [1, 0], [1, -1],
+    ];
+  }
+
+  function regenerateGrid() {
+    clearTimeouts();
+
+    const rowNumber = document.querySelector(".grid-generator .row-number").value;
+    const colNumber = document.querySelector(".grid-generator .col-number").value;
+    const startPointNumber = document.querySelector(".grid-generator .starting-number").value;
+    const targetWords = document.querySelector(".grid-generator .target-words").value;
+
+    const testcase = new TestcaseGenerator({
+      rowNumber,
+      colNumber,
+      startPointNumber,
+      targetLength: targetWords.length,
+      directions: window.globals.directions,
+    });
+    testcase.generate({ targetOverride: targetWords });
+
+    window.globals.grid = testcase.grid;
+    window.globals.target = testcase.target;
+
+    const grid = new GridMaker({
+      grid: testcase.grid,
+      canvasId: "canvas",
+    });
+    grid.draw();
+
+    window.globals.table = grid.table;
+  }
+
+  function configureAnimation() {
+    window.globals.markerColor = document.querySelector(".animation .marker-color").value;;
+    window.globals.answerColor = document.querySelector(".animation .answer-color").value;
+    window.globals.intervalTime = document.querySelector(".animation .interval-time").value;
+  }
+
+  function clearTimeouts() {
+    let lastTimeoutId = setTimeout(() => {}, 0);
+    for (let timeoutId = 0; timeoutId < lastTimeoutId; timeoutId += 1) {
+      clearTimeout(timeoutId);
+    }
+  }
+
+  function configureSolver(approach = "") {
+    clearTimeouts();
+    configureAnimation();
+
+    switch (approach) {
+      case "bruteforce":
+        window.globals.bruteForceSolver = new BruteForceSolver({
+          ...window.globals,
+          marker: new GridMarker({ ...window.globals }),
+          state: new StateManager({ targetElement: document.querySelector(".animation .current-state") }),
+        });
+        break;
+      case "dynamicprogramming":
+        break;
+      case "backtracking":
+        break;
+    }
+  }
+
+  function runSolver(approach = "") {
+    configureSolver(approach);
+
+    switch (approach) {
+      case "bruteforce":
+        window.globals.bruteForceSolver.solve();
+        setElapsedTime(window.globals.bruteForceSolver.elapsedTime);
+        break;
+      case "dynamicprogramming":
+        alert("NOT IMPLEMENTED!");
+        break;
+      case "backtracking":
+        alert("NOT IMPLEMENTED!");
+        break;
+    }
+  }
+
+  function setElapsedTime(time = "N/A") {
+    document.querySelector(".animation .elapsed-time").innerHTML = time + "ms";
+  }
+</script>
