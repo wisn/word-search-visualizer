@@ -91,6 +91,8 @@ class BruteForceSolver {
 
     const endTime = new Date();
     this.#elapsedTime = endTime - beginTime;
+
+    this.#state.set(`done searching. found ${this.#answer.length} words`);
   }
 
   get answer() {
