@@ -13,6 +13,7 @@
     <script lang="javascript" src="./GridMarker.js"></script>
     <script lang="javascript" src="./StateManager.js"></script>
     <script lang="javascript" src="./BruteForceSolver.js"></script>
+    <script lang="javascript" src="./BacktrackingSolver.js"></script>
   </head>
   <body>
     <div align="center">
@@ -139,6 +140,11 @@
       case "dynamicprogramming":
         break;
       case "backtracking":
+        window.globals.backtrackingSolver = new BacktrackingSolver({
+          ...window.globals,
+          marker: new GridMarker({ ...window.globals }),
+          state: new StateManager({ targetElement: document.querySelector(".animation .current-state") }),
+        });
         break;
     }
   }
@@ -155,7 +161,8 @@
         alert("NOT IMPLEMENTED!");
         break;
       case "backtracking":
-        alert("NOT IMPLEMENTED!");
+        window.globals.backtrackingSolver.solve();
+        setElapsedTime(window.globals.backtrackingSolver.elapsedTime);
         break;
     }
   }
