@@ -15,6 +15,7 @@
     <script lang="javascript" src="./GridPointer.js"></script>
     <script lang="javascript" src="./BruteForceSolver.js"></script>
     <script lang="javascript" src="./BacktrackingSolver.js"></script>
+    <script lang="javascript" src="./DynamicProgrammingSolver.js"></script>
   </head>
   <body>
     <div align="center">
@@ -135,15 +136,23 @@
         window.globals.bruteForceSolver = new BruteForceSolver({
           ...window.globals,
           marker: new GridMarker({ ...window.globals }),
+          pointer: new GridPointer({ ...window.globals }),
           state: new StateManager({ targetElement: document.querySelector(".animation .current-state") }),
         });
         break;
       case "dynamicprogramming":
+        window.globals.dynamicProgrammingSolver = new DynamicProgrammingSolver({
+          ...window.globals,
+          marker: new GridMarker({ ...window.globals }),
+          pointer: new GridPointer({ ...window.globals }),
+          state: new StateManager({ targetElement: document.querySelector(".animation .current-state") }),
+        });
         break;
       case "backtracking":
         window.globals.backtrackingSolver = new BacktrackingSolver({
           ...window.globals,
           marker: new GridMarker({ ...window.globals }),
+          pointer: new GridPointer({ ...window.globals }),
           state: new StateManager({ targetElement: document.querySelector(".animation .current-state") }),
         });
         break;
@@ -159,7 +168,8 @@
         setElapsedTime(window.globals.bruteForceSolver.elapsedTime);
         break;
       case "dynamicprogramming":
-        alert("NOT IMPLEMENTED!");
+        window.globals.dynamicProgrammingSolver.solve();
+        setElapsedTime(window.globals.dynamicProgrammingSolver.elapsedTime);
         break;
       case "backtracking":
         window.globals.backtrackingSolver.solve();

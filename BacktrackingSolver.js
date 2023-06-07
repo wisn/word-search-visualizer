@@ -66,7 +66,7 @@ class BacktrackingSolver {
           this.#marker.queueMark({ row, col });
           this.#marker.animate();
           this.#state.set(`checking (${row},${col}): ${this.#grid[row][col]} vs ${this.#target[0]} (doesn't match)`);
-          this.#marker.queueRevert({ row, col })
+          this.#marker.queueRevert({ row, col });
           this.#marker.animate();
           this.#state.set(`move to the next!`);
           continue;

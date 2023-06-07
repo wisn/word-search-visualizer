@@ -23,10 +23,15 @@ class GridPointer {
     };
     this.#pointed = Array(this.#rowNumber);
     for (let row = 0; row < this.#rowNumber; row += 1) {
-      this.#pointed[row] = Array(this.#colNumber).fill({});
+      this.#pointed[row] = Array(this.#colNumber);
+      for (let col = 0; col < this.#colNumber; col += 1) {
+        this.#pointed[row][col] = {};
+      }
     }
     this.#queue = Array();
     this.#seconds = 0;
+
+    document.querySelectorAll("img.arrow").forEach(elm => elm.remove());
   }
 
   point({ row, col, direction } = {}) {
@@ -38,13 +43,14 @@ class GridPointer {
       return;
     }
 
-    if (typeof this.#pointed[row][col][direction.toString()] === "boolean" && this.#pointed[row][col][direction.toString()]) {
+    if (this.#pointed[row][col][direction.toString()]) {
       return;
     }
 
     const arrow = document.createElement("img");
     arrow.src = "./arrow.png";
     arrow.classList.add("arrow");
+    arrow.style.zIndex = 9999;
 
     const styles = this.#rotator[direction.toString()];
     Object.keys(styles).forEach(key => {
